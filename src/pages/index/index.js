@@ -32,18 +32,23 @@ function attack(GAME) {
         GAME.attacker.rage = 0;
     } else {
         $('#crit').html('<br>');
-        $('#damage').html(
-            '<p>Damage: ' + damage + '</p>',
-            (GAME.attacker.rage += 10)
-        );
-        $('health');
-        GAME.defender.health -= damage;
+        $('#damage').html('<p>Damage: ' + damage + '</p>');
+        GAME.attacker.rage += 10;
     }
+    GAME.defender.health -= damage;
 }
 function heal(GAME) {
     GAME.attacker.health += 10;
     GAME.attacker.rage -= 5;
 }
+function superattack(GAME) {
+    damage = randomNumber(GAME.attacker.low, GAME.attacker.high) * 2;
+    $('#crit').html('<br>');
+    $('#damage').html('<p>Damage: ' + damage + '</p>');
+    GAME.attacker.rage -= 20;
+    GAME.defender.health -= damage;
+}
+
 function changeTurn(GAME) {
     if (GAME.turn === 0) {
         (GAME.attacker = g2), (GAME.defender = g1), (GAME.turn = 1);
@@ -62,6 +67,9 @@ function attachHandlers(GAME) {
 
     $('#heal').on('click', function() {
         heal(GAME), draw(GAME);
+    });
+    $('#superattack').on('click', function() {
+        superattack(GAME), draw(GAME);
     });
 }
 
@@ -91,6 +99,11 @@ function showStatus(GAME) {
     );
 }
 function draw(GAME) {
+    if (GAME.defender.rage < 20 || GAME.defender.rage === 0) {
+        $('#superattack').attr('disabled', true);
+    } else if (GAME.defender.rage >= 20) {
+        $('#superattack').removeAttr('disabled');
+    }
     if (GAME.g1.health <= 0) {
         $('body').html(
             "<center><h1>Gladiator 2 is the winner!!!!!!</h1><hr><button id='restart' onclick='document.location.reload()'><i class='fa fa-repeat' aria-hidden='true'></i>   Restart</button></center>"
@@ -103,9 +116,10 @@ function draw(GAME) {
 
     if (GAME.defender.rage < 5 || GAME.defender.health + 10 > 100) {
         $('#heal').attr('disabled', true);
-    } else if (GAME.defender.rage >= 5) {
+    } else if (GAME.defender.rage >= 5 && GAME.defender.health + 10 < 100) {
         $('#heal').removeAttr('disabled');
     }
+
     changeTurn(GAME);
     showTurn(GAME);
     showStatus(GAME);
@@ -117,6 +131,7 @@ function start() {
     showStatus(GAME);
     attachHandlers(GAME);
     $('#heal').attr('disabled', true);
+    $('#superattack').attr('disabled', true);
 }
 g1 = newGladiator('Player 1');
 g2 = newGladiator('Player 2');

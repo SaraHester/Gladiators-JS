@@ -36,16 +36,22 @@
             background-image: linear-gradient(to bottom, #2E2E2E, #969696);
         }
 
+        #attack,
+        #heal,
+        #superattack {
+            height: 45px;
+            width: 100px;
+            font-size: 30px;
+        }
+
         #attack {
             color: #000000;
             border-color: black;
-            height: 40px;
-            width: 100px;
-            font-size: 30px;
-            background-image: linear-gradient(to bottom, #C00000, #FF3300);
+            background-image: linear-gradient(to bottom, #3F0000, rgb(255, 17, 0));
         }
 
         #heal[disabled],
+        #superattack[disabled],
         html input[disabled] {
             color: white;
             background-image: linear-gradient(to bottom, gray, white);
@@ -54,12 +60,14 @@
         #heal {
             color: green;
             border-color: white;
-            height: 40px;
-            width: 100px;
-            font-size: 30px;
             background-image: linear-gradient(to bottom, #007C00, #88FF88);
         }
 
+        #superattack {
+            color: #000000;
+            border-color: black;
+            background-image: linear-gradient(to bottom, black, red)
+        }
 
         #restart {
             height: 100px;
@@ -105,11 +113,12 @@
         </div>
         <div id='status'>
         </div>
-        <div id='damage'></div>
-        <div id='crit'></div>
+        <div id='damage'><br></div>
+        <div id='crit'><br></div>
         <div id='turn'></div>
-        <button id='attack'>Attack<i class="fa fa-superpowers" aria-hidden="true"></i></button>&emsp;&emsp;&emsp;&emsp;
-        <button id='heal'>Heal<i class="fa fa-medkit" aria-hidden="true"></i></button>
+        <button title='-20 rage' id='superattack'>Super<i class="fa fa-bolt" aria-hidden="true"></i></button>&emsp;&emsp;&emsp;&emsp;
+        <button id='attack'>Attack<i class="fa fa-bomb" aria-hidden="true"></i></button>&emsp;&emsp;&emsp;&emsp;
+        <button title='-5 rage' id='heal'>Heal<i class="fa fa-medkit" aria-hidden="true"></i></button>
         <div id="app"></div>
         <script src="index.js"></script>
     </center>
