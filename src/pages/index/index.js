@@ -2,8 +2,8 @@ const $ = require('jquery');
 function randomNumber(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
-function critical(GAME) {
-    if (randomNumber(1, 100) < GAME.attacker.rage) {
+function randChance(chance) {
+    if (randomNumber(1, 100) < chance) {
         return true;
     } else {
         return false;
@@ -15,7 +15,10 @@ function newGladiator(name) {
         health: 100,
         rage: 0,
         low: randomNumber(10, 15),
-        high: randomNumber(15, 20)
+        high: randomNumber(15, 20),
+        chance: 5,
+        armor: 20,
+        dodgeChance: 5
     };
 }
 function showTurn(GAME) {
@@ -23,29 +26,93 @@ function showTurn(GAME) {
 }
 
 function attack(GAME) {
-    damage = randomNumber(GAME.attacker.low, GAME.attacker.high);
-    if (critical(GAME)) {
-        damage *= 2;
-        $('#crit').html(
-            '<p><i class="fa fa-exclamation-circle" aria-hidden="true"></i>Hit was Critical<i class="fa fa-exclamation-circle" aria-hidden="true"></i></p>'
+    damage =
+        randomNumber(GAME.attacker.low, GAME.attacker.high) -
+        GAME.defender.armor;
+
+    if ($('#perks').val === 'iattack') {
+        damage += damage * 0.5;
+        $('#active-perk').html(
+            String(GAME.attacker.name) + "'s attack increased by 5%"
         );
-        GAME.attacker.rage = 0;
-    } else {
+    }
+    if ($("#perks").val === 'iarmor') {
+        GAME.attacker.armor += GAME.attacker.armor * .5;
+        $("#active-perk").html(String(GAME.attacker.name) + "'s armor increased by 5%")
+    }
+    if ($('#perks') === 'icritical') {
+        GAME.attacker.chance += GAME.attacker.chance * 0.5;
+        $('#active-perk').html(
+            GAME.attacker.name + "'s critical chance increased by 5%"
+        );
+    }
+    if ($('#perks').val === 'iswiftness') {
+        $("#active-perk").html(String(GAME.attacker.name) + "'s dodge chance increased by 5%")
+    }
+    if (randChance(GAME.defender.dodgeChance)) {
+        damage = 0;
+        $('#crit').html('<br>');
+        $('#damage').html(GAME.defender.name + ' succesfully dodged!');
+    } 
+    
+     if (randChance(GAME.attacker.chance)) {
+            damage *= 2;
+            $('#crit').html(
+                '<p><i class="fa fa-exclamation-circle" aria-hidden="true"></i>Hit was Critical<i class="fa fa-exclamation-circle" aria-hidden="true"></i></p>'
+            );
+            GAME.attacker.rage = 0;
+            GAME.attacker.chance = 5;
+        }
+        
+    else {
+        GAME.attacker.rage += 10;
+        GAME.attacker.chance += 10;
         $('#crit').html('<br>');
         $('#damage').html('<p>Damage: ' + damage + '</p>');
-        GAME.attacker.rage += 10;
-    }
+
     GAME.defender.health -= damage;
 }
 function heal(GAME) {
+    if ($('#perks').val === 'iswiftness') {
+        $("#active-perk").html(String(GAME.attacker.name) + "'s dodge chance increased by 5%")
+    }
+    if ($('#perks').val == 'iattack') {
+        GAME.attacker.health += 5;
+        $('#active-perk').html(
+            GAME.attacker.name + "'s health was increased by 5 points"
+        );
+    }if ($("#perks").val === 'iarmor') {
+        GAME.attacker.armor += GAME.attacker.armor * .5;
+        $("#active-perk").html(String(GAME.attacker.name) + "'s armor increased by 5%")
+    }
     GAME.attacker.health += 10;
     GAME.attacker.rage -= 5;
+    GAME.attacker.chance -= 5;
 }
 function superattack(GAME) {
     damage = randomNumber(GAME.attacker.low, GAME.attacker.high) * 2;
+    if ($('#perks').val === 'iswiftness') {
+        $("#active-perk").html(String(GAME.attacker.name) + "'s dodge chance increased by 5%")
+    }
+    if ($("#perks").val === 'iarmor') {
+        GAME.attacker.armor += GAME.attacker.armor * .5;
+        $("#active-perk").html(String(GAME.attacker.name) + "'s armor increased by 5%")
+    }
+    if ($('#perks').val === 'iattack') {
+        damage += damage * 0.5;
+        $('#active-perk').html(
+            GAME.attacker.name + "'s attack increased by 5%"
+        );
+    } else if ($('#perks').val === 'icritical') {
+        GAME.defender.chance -= GAME.defender.chance * 0.5;
+        $('#active-perk').html(
+            GAME.defender.name + "'s critical chance decreased by 5%"
+        );
+    }
     $('#crit').html('<br>');
     $('#damage').html('<p>Damage: ' + damage + '</p>');
-    GAME.attacker.rage -= 20;
+    GAME.attacker.rage -= 10;
+    GAME.attacker.chance -= 10;
     GAME.defender.health -= damage;
 }
 
@@ -99,11 +166,6 @@ function showStatus(GAME) {
     );
 }
 function draw(GAME) {
-    if (GAME.defender.rage < 20 || GAME.defender.rage === 0) {
-        $('#superattack').attr('disabled', true);
-    } else if (GAME.defender.rage >= 20) {
-        $('#superattack').removeAttr('disabled');
-    }
     if (GAME.g1.health <= 0) {
         $('body').html(
             "<center><h1>Gladiator 2 is the winner!!!!!!</h1><hr><button id='restart' onclick='document.location.reload()'><i class='fa fa-repeat' aria-hidden='true'></i>   Restart</button></center>"
@@ -119,7 +181,11 @@ function draw(GAME) {
     } else if (GAME.defender.rage >= 5 && GAME.defender.health + 10 < 100) {
         $('#heal').removeAttr('disabled');
     }
-
+    if (GAME.defender.rage < 10 || GAME.defender.rage === 0) {
+        $('#superattack').attr('disabled', true);
+    } else if (GAME.defender.rage >= 10) {
+        $('#superattack').removeAttr('disabled');
+    }
     changeTurn(GAME);
     showTurn(GAME);
     showStatus(GAME);
