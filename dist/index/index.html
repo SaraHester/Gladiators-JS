@@ -1,0 +1,40 @@
+<html>
+
+<head>
+    <title>Gladiators</title>
+    <link rel='stylesheet' href='../../static/css/stylesheet.css'>
+    <script src="https://use.fontawesome.com/10a5b7cff7.js"></script>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+        crossorigin="anonymous">
+
+</head>
+
+<body>
+    <center>
+        <div class='title'>Gladiators</i>
+        </div>
+        <div id='status'>
+        </div>
+        <div id='damage'><br></div>
+        <div id='crit'><br></div>
+        <div id='activeperk'><br></div>
+        <div id='turn'></div>
+        <button title='-20 rage' id='superattack'>Super<i class="fa fa-bolt" aria-hidden="true"></i></button>&emsp;&emsp;&emsp;&emsp;
+        <button id='attack'>Attack<i class="fa fa-bomb" aria-hidden="true"></i></button>&emsp;&emsp;&emsp;&emsp;
+        <button title='-5 rage' id='heal'>Heal<i class="fa fa-medkit" aria-hidden="true"></i></button>
+        <br><br><br><br>
+        <label for='perks'>Pick one perk Only: </label><br>
+        <select id='perks' required>
+            <option id='iattack' value='iattack' selected='selected'> Increase Attack/Healing</option>
+            <option id='iswiftness' value='iswiftness' > Increase Swiftness</option>
+            <option id='iarmor' value='iarmor' > Increase Armor</option>
+            <option id='icritical' value='icritical' > Increase/Decrease Critical</option>
+        </select><br><br><br><br>
+
+        <div id='help'>?</div>
+        <div id="app"></div>
+        <script src="index.js"></script>
+    </center>
+</body>
+
+</html>
