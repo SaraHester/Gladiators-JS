@@ -2,109 +2,11 @@
 
 <head>
     <title>Gladiators</title>
+    <link rel='stylesheet' href='../../static/css/stylesheet.css'>
     <script src="https://use.fontawesome.com/10a5b7cff7.js"></script>
-    <style>
-        body {
-            color: maroon;
-            background-image: linear-gradient(to bottom, gray, black);
-        }
-
-        hr {
-            border-top: 1px solid #f70000;
-        }
-
-
-
-        .title {
-            font-size: 50px;
-            background-image: linear-gradient(to bottom, red, black);
-        }
-
-        #damage,
-        #crit {
-            color: #000000;
-            font-size: 25px;
-        }
-
-        #turn {
-            color: maroon;
-        }
-
-        #status {
-            font-size: 25px;
-            color: black;
-            background-image: linear-gradient(to bottom, #2E2E2E, #969696);
-        }
-
-        #attack,
-        #heal,
-        #superattack {
-            height: 45px;
-            width: 100px;
-            font-size: 30px;
-        }
-
-        #attack {
-            color: #000000;
-            border-color: black;
-            background-image: linear-gradient(to bottom, #3F0000, rgb(255, 17, 0));
-        }
-
-        #heal[disabled],
-        #superattack[disabled],
-        html input[disabled] {
-            color: white;
-            background-image: linear-gradient(to bottom, gray, white);
-        }
-
-        #heal {
-            color: green;
-            border-color: white;
-            background-image: linear-gradient(to bottom, #007C00, #88FF88);
-        }
-
-        #superattack {
-            color: #000000;
-            border-color: black;
-            background-image: linear-gradient(to bottom, black, red)
-        }
-
-        #restart {
-            height: 100px;
-            width: 400px;
-            font-size: 50px;
-            font-family: Freeserif;
-            font-style: italic;
-            color: black;
-            background-image: linear-gradient( to top,
-            black, red);
-            transition: background-image, 2s;
-        }
-
-
-
-        .progress-bar,
-        p {
-            display: inline;
-        }
-
-        .progress {
-            float: none;
-            width: 600px;
-            background-image: linear-gradient(to right, #535353, #000000);
-        }
-
-        .progress-bar-success {
-            background-image: linear-gradient(to right, #88FF88, #007C00);
-        }
-
-        .progress-bar-danger {
-            background-image: linear-gradient(to right, #FF3300, #C00000)
-        }
-    </style>
-    <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
         crossorigin="anonymous">
+
 </head>
 
 <body>
@@ -115,10 +17,21 @@
         </div>
         <div id='damage'><br></div>
         <div id='crit'><br></div>
+        <div id='activeperk'><br></div>
         <div id='turn'></div>
         <button title='-20 rage' id='superattack'>Super<i class="fa fa-bolt" aria-hidden="true"></i></button>&emsp;&emsp;&emsp;&emsp;
         <button id='attack'>Attack<i class="fa fa-bomb" aria-hidden="true"></i></button>&emsp;&emsp;&emsp;&emsp;
         <button title='-5 rage' id='heal'>Heal<i class="fa fa-medkit" aria-hidden="true"></i></button>
+        <br><br><br><br>
+        <label for='perks'>Pick one perk Only: </label><br>
+        <select id='perks' required>
+            <option id='iattack' value='iattack' selected='selected'> Increase Attack/Healing</option>
+            <option id='iswiftness' value='iswiftness' > Increase Swiftness</option>
+            <option id='iarmor' value='iarmor' > Increase Armor</option>
+            <option id='icritical' value='icritical' > Increase/Decrease Critical</option>
+        </select><br><br><br><br>
+
+        <div id='help'>?</div>
         <div id="app"></div>
         <script src="index.js"></script>
     </center>

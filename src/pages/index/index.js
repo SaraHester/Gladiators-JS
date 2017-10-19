@@ -1,4 +1,5 @@
 const $ = require('jquery');
+
 function randomNumber(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
@@ -26,86 +27,106 @@ function showTurn(GAME) {
 }
 
 function attack(GAME) {
-    damage =
-        randomNumber(GAME.attacker.low, GAME.attacker.high) -
-        GAME.defender.armor;
+    hitdamage = randomNumber(GAME.attacker.low, GAME.attacker.high);
+    damage = hitdamage - Math.round(hitdamage * (GAME.defender.armor / 100));
 
-    if ($('#perks').val === 'iattack') {
+    if ($('#perks').val() === 'iattack') {
         damage += damage * 0.5;
-        $('#active-perk').html(
+        $('#activeperk').html(
             String(GAME.attacker.name) + "'s attack increased by 5%"
         );
     }
-    if ($("#perks").val === 'iarmor') {
-        GAME.attacker.armor += GAME.attacker.armor * .5;
-        $("#active-perk").html(String(GAME.attacker.name) + "'s armor increased by 5%")
+    if ($('#perks').val() === 'iarmor') {
+        GAME.attacker.armor += Math.round(GAME.attacker.armor * 0.5);
+        $('#activeperk').html(
+            String(GAME.attacker.name) + "'s armor increased by 5%"
+        );
     }
-    if ($('#perks') === 'icritical') {
-        GAME.attacker.chance += GAME.attacker.chance * 0.5;
-        $('#active-perk').html(
+    if ($('#perks').val() === 'icritical') {
+        GAME.attacker.chance += Math.round(GAME.attacker.chance * 0.5);
+        $('#activeperk').html(
             GAME.attacker.name + "'s critical chance increased by 5%"
         );
     }
-    if ($('#perks').val === 'iswiftness') {
-        $("#active-perk").html(String(GAME.attacker.name) + "'s dodge chance increased by 5%")
+    if ($('#perks').val() === 'iswiftness') {
+        $('#activeperk').html(
+            String(GAME.attacker.name) + "'s dodge chance increased by 5%"
+        );
     }
     if (randChance(GAME.defender.dodgeChance)) {
         damage = 0;
         $('#crit').html('<br>');
         $('#damage').html(GAME.defender.name + ' succesfully dodged!');
-    } 
-    
-     if (randChance(GAME.attacker.chance)) {
-            damage *= 2;
-            $('#crit').html(
-                '<p><i class="fa fa-exclamation-circle" aria-hidden="true"></i>Hit was Critical<i class="fa fa-exclamation-circle" aria-hidden="true"></i></p>'
-            );
-            GAME.attacker.rage = 0;
-            GAME.attacker.chance = 5;
-        }
-        
-    else {
+    }
+
+    if (randChance(GAME.attacker.chance)) {
+        damage *= 2;
+        $('#crit').html(
+            '<p><i class="fa fa-exclamation-circle" aria-hidden="true"></i>Hit was Critical<i class="fa fa-exclamation-circle" aria-hidden="true"></i></p>'
+        );
+        GAME.attacker.rage = 0;
+        GAME.attacker.chance = 5;
+    } else {
         GAME.attacker.rage += 10;
         GAME.attacker.chance += 10;
         $('#crit').html('<br>');
         $('#damage').html('<p>Damage: ' + damage + '</p>');
 
-    GAME.defender.health -= damage;
+        GAME.defender.health -= damage;
+    }
 }
 function heal(GAME) {
-    if ($('#perks').val === 'iswiftness') {
-        $("#active-perk").html(String(GAME.attacker.name) + "'s dodge chance increased by 5%")
+    if ($('#perks').val() === 'icritical') {
+        GAME.defender.chance -= Math.round(GAME.defender.chance * 0.5);
+        $('#activeperk').html(
+            GAME.defender.name + "'s critical chance decreased by 5%"
+        );
     }
-    if ($('#perks').val == 'iattack') {
+    if ($('#perks').val() == 'iattack') {
         GAME.attacker.health += 5;
-        $('#active-perk').html(
+        $('#activeperk').html(
             GAME.attacker.name + "'s health was increased by 5 points"
         );
-    }if ($("#perks").val === 'iarmor') {
-        GAME.attacker.armor += GAME.attacker.armor * .5;
-        $("#active-perk").html(String(GAME.attacker.name) + "'s armor increased by 5%")
     }
+
+    if ($('#perks').val() === 'iarmor') {
+        GAME.attacker.armor += Math.round(GAME.attacker.armor * 0.5);
+        $('#activeperk').html(
+            String(GAME.attacker.name) + "'s armor increased by 5%"
+        );
+    }
+
+    if ($('#perks').val() === 'iswiftness') {
+        $('#activeperk').html(
+            String(GAME.attacker.name) + "'s dodge chance increased by 5%"
+        );
+    }
+
     GAME.attacker.health += 10;
     GAME.attacker.rage -= 5;
     GAME.attacker.chance -= 5;
 }
 function superattack(GAME) {
     damage = randomNumber(GAME.attacker.low, GAME.attacker.high) * 2;
-    if ($('#perks').val === 'iswiftness') {
-        $("#active-perk").html(String(GAME.attacker.name) + "'s dodge chance increased by 5%")
-    }
-    if ($("#perks").val === 'iarmor') {
-        GAME.attacker.armor += GAME.attacker.armor * .5;
-        $("#active-perk").html(String(GAME.attacker.name) + "'s armor increased by 5%")
-    }
-    if ($('#perks').val === 'iattack') {
+    if ($('#perks').val() === 'iattack') {
         damage += damage * 0.5;
-        $('#active-perk').html(
-            GAME.attacker.name + "'s attack increased by 5%"
+        $('#activeperk').html(GAME.attacker.name + "'s attack increased by 5%");
+    }
+    if ($('#perks').val() === 'iarmor') {
+        GAME.attacker.armor += Math.round(GAME.attacker.armor * 0.5);
+        $('#activeperk').html(
+            String(GAME.attacker.name) + "'s armor increased by 5%"
         );
-    } else if ($('#perks').val === 'icritical') {
-        GAME.defender.chance -= GAME.defender.chance * 0.5;
-        $('#active-perk').html(
+    }
+
+    if ($('#perks').val() === 'iswiftness') {
+        $('#activeperk').html(
+            String(GAME.attacker.name) + "'s dodge chance increased by 5%"
+        );
+    }
+    if ($('#perks').val() === 'icritical') {
+        GAME.defender.chance -= Math.round(GAME.defender.chance * 0.5);
+        $('#activeperk').html(
             GAME.defender.name + "'s critical chance decreased by 5%"
         );
     }
@@ -142,27 +163,47 @@ function attachHandlers(GAME) {
 
 function showStatus(GAME) {
     $('#status').html(
-        "Player 1<div id='health' class='progress'><div class='progress-bar progress-bar-success' aria-valuemax='100' style='width: " +
+        '<table><tr><td>Player 1</td><td>Player 2</td></tr>' +
+            "<tr><td><div id='health' class='progress'><div class='progress-bar progress-bar-success' aria-valuemax='100' style='width: " +
             GAME.g1.health +
             "%'>" +
             GAME.g1.health +
-            '  Health</div></div>' +
-            "<div id='rage' class='progress'><div class='progress-bar progress-bar-danger' aria-valuemax='100' style='width: " +
-            GAME.g1.rage +
-            "%'>" +
-            GAME.g1.rage +
-            '  Rage</div></div>' +
-            "Player 2<br><div id='health' class='progress'><div class='progress-bar progress-bar-success' aria-valuemax='100' style='width: " +
+            '  Health</div></div></td>' +
+            "<td><div id='health' class='progress'><div class='progress-bar progress-bar-success' aria-valuemax='100' style='width: " +
             GAME.g2.health +
             "%'>" +
             GAME.g2.health +
-            '  Health</div></div>' +
-            "<div id='rage' class='progress'><div class='progress-bar progress-bar-danger' aria-valuemax='100' style='width: " +
+            '  Health</div></div></td></tr>' +
+            "<tr><td><div id='rage' class='progress'><div class='progress-bar progress-bar-info' aria-valuemax='100' style='width: " +
+            GAME.g1.rage +
+            "%'>" +
+            GAME.g1.rage +
+            '  Rage</div></div></td>' +
+            "<td><div id='rage' class='progress'><div class='progress-bar progress-bar-info' aria-valuemax='100' style='width: " +
             GAME.g2.rage +
             "%'>" +
             GAME.g2.rage +
-            '  Rage</div></div>' +
-            '<hr>'
+            '  Rage</div></div></td>' +
+            "<tr><td><div id='armor' class='progress'><div class='progress-bar progress-bar-warning' aria-valuemax='100' style='width: " +
+            GAME.g1.armor +
+            "%'>" +
+            GAME.g1.armor +
+            '  Armor</div></div></td>' +
+            "<td><div id='armor' class='progress'><div class='progress-bar progress-bar-warning' aria-valuemax='100' style='width: " +
+            GAME.g2.armor +
+            "%'>" +
+            GAME.g2.armor +
+            '  Armor</div></div></td></tr>' +
+            "<tr><td><div id='critical' class='progress'><div class='progress-bar progress-bar-danger' aria-valuemax='100' style='width: " +
+            GAME.g1.chance +
+            "%'>" +
+            GAME.g1.chance +
+            '  Critical Chance</div></div></div></td>' +
+            "<td><div id='critical' class='progress'><div class='progress-bar progress-bar-danger' aria-valuemax='100' style='width: " +
+            GAME.g2.chance +
+            "%'>" +
+            GAME.g2.chance +
+            '  Critical chance</div></div></div></div><td></tr>'
     );
 }
 function draw(GAME) {
